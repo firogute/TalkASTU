@@ -1,10 +1,10 @@
 import express from "express";
 import bcrypt from "bcryptjs";
 import db from "../db.js";
+import jwtGenerator from "../utils/jwtGenerator.js";
 
 const app = express();
 const router = express.Router();
-import cors from "cors";
 
 router.post("/register", async (req, res) => {
   try {
@@ -33,13 +33,27 @@ router.post("/register", async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, saltRounds);
     //   Adding the new user to the database
     const newUser = await db.query(
-      "INSERT INTO users (username,password) VALUES($1,$2)",
+      "INSERT INTO users (username,password) VALUES($1,$2) RETURNING *",
       [username, hashedPassword]
     );
-    return res.status(201).json({ message: "User  registered successfully" });
+
+    const token = jwtGenerator(newUser.rows[0].user_id);
+    return res.status(201).json({
+      token,
+      message: "User  registered successfully",
+      userId: newUser.rows[0].user_id,
+    });
   } catch (err) {
     console.error(err.message);
     return res.status(500).json({ message: "Server error" });
+  }
+});
+
+router.post("/login", async (req, res) => {
+  try {
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).json({ message: "Server error" });
   }
 });
 

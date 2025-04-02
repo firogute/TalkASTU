@@ -12,5 +12,5 @@ const db = new Pool({
   port: process.env.DB_PORT,
 });
 
-// console.log(process.env.USER);
+// console.log(process.env.JWT_SECRET);
 export default db;

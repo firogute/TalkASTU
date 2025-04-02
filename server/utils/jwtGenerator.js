@@ -15,5 +15,5 @@ const jwtGenerator = (userId) => {
   );
 };
 
-console.log(process.env.JWT_SECRET);
+// console.log(process.env.JWT_SECRET);
 export default jwtGenerator;
