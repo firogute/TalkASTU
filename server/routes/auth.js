@@ -14,6 +14,11 @@ router.post("/register", async (req, res) => {
     if (!username || !password) {
       return res.status(400).json({ message: "Please enter all fields" });
     }
+    if (password.length < 8) {
+      return res
+        .status(400)
+        .json({ message: "Password must be at least 8 characters" });
+    }
 
     //   check if the user is already registered (if exist return)
     const user = await db.query("SELECT * from users WHERE username = $1", [
