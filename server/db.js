@@ -9,7 +9,7 @@ const db = new Pool({
   password: process.env.PASSWORD,
   host: process.env.HOST,
   database: process.env.DATABASE,
-  port: process.env.PORT,
+  port: process.env.DB_PORT,
 });
 
 // console.log(process.env.USER);
