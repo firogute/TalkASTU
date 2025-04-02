@@ -5,3 +5,11 @@ CREATE TABLE users (
   password VARCHAR(255) NOT NULL,
   created_at TIMESTAMP DEFAULT NOW()
 );
+
+
+CREATE TABLE posts (
+    id SERIAL PRIMARY KEY,
+    user_id INT REFERENCES users(user_id) ON DELETE CASCADE,
+    content TEXT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
