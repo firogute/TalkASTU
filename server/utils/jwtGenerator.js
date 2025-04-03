@@ -10,7 +10,7 @@ const jwtGenerator = (userId) => {
   const payload = { userId };
   return jsonWebToken.sign(
     payload,
-    process.env.JWT_SECRET,
+    process.env.JWT_SECRET_KEY,
     { expiresIn: "1d" } // Token expires in 1 day
   );
 };

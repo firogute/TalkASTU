@@ -8,9 +8,10 @@ export default function (req, res, next) {
     if (!jwtToken) {
       return res.status(403).json("No token, authorization denied");
     }
-    const payload = jwt.verify(jwtToken, process.env.jwtSecretKey);
+    console.log(process.env.JWT_SECRET_KEY);
+    const payload = jwt.verify(jwtToken, process.env.JWT_SECRET_KEY);
     // console.log(payload);
-    req.user = payload.user;
+    req.user = payload.userId;
     next();
   } catch (err) {
     console.error(err.message);

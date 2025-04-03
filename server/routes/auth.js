@@ -1,6 +1,6 @@
 import express from "express";
 import bcrypt from "bcryptjs";
-import db from "../db.js";
+import db from "../config/db.js";
 import jwtGenerator from "../utils/jwtGenerator.js";
 import authorization from "../middleware/authorization.js";
 
@@ -86,4 +86,38 @@ router.post("/login", async (req, res) => {
   }
 });
 
+router.post("/post", authorization, async (req, res) => {
+  try {
+    const { content, image_url } = req.body;
+
+    // Validate imputs
+    if (!content && !image_url) {
+      return res
+        .status(400)
+        .json({ message: "Either content or image_url must be provided" });
+    }
+
+    // Prepare new post
+    const newPost = {
+      user_id: req.user,
+      content: content || null,
+      image_url: image_url || null,
+    };
+    console.log(newPost);
+
+    // Insert new post into the database
+    const post = await db.query(
+      "INSERT INTO posts (user_id, content, image_url) VALUES ($1,$2,$3) RETURNING *",
+      [newPost.user_id, newPost.content, newPost.image_url]
+    );
+    if (!post.rows[0]) {
+      return res.status(500).json({ message: "Failed to create post" });
+    }
+
+    res.status(201).json(post.rows[0]);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).json({ message: "Server error" });
+  }
+});
 export default router;
