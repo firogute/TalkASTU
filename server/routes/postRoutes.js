@@ -79,4 +79,32 @@ router.get("/:user_id", async (req, res) => {
   }
 });
 
+router.delete("/:id", authorization, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const user_id = req.user;
+
+    const postResult = await db.query("DELETE FROM posts WHERE id = $1", [id]);
+    if (postResult.rows.length === 0) {
+      return res.status(404).json({ message: "Post not found" });
+    }
+
+    const post = postResult.rows[0];
+
+    if (post.user_id !== user_id) {
+      return res.status(403).json({
+        message: "Unauthorized: You do not have permission to delete this post",
+      });
+    }
+
+    // Proceed to delete the post from the database
+    await db.query("DELETE FROM posts WHERE id = $1", [id]);
+
+    // Return success message
+    return res.status(200).json({ message: "Post deleted successfully" });
+  } catch (err) {
+    console.error("Error deleting posts:", err.message);
+    res.status(500).json({ message: "Server error" });
+  }
+});
 export default router;
