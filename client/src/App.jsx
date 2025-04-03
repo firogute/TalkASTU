@@ -1,8 +1,15 @@
-import { useState } from "react";
-import "./App.css";
+import { Route, Router, Routes } from "react-router-dom";
 
 function App() {
-  return <></>;
+  return (
+    <>
+      <Router>
+        <Routes>
+          <Route></Route>
+        </Routes>
+      </Router>
+    </>
+  );
 }
 
 export default App;
