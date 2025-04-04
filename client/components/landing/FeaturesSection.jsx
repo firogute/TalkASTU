@@ -1,18 +1,18 @@
 const features = [
   {
-    title: "Campus Network",
-    desc: "Connect with students and faculty across all departments.",
-    icon: "👥",
+    title: "Anonymous Confessions",
+    desc: "Spill your secrets, crushes, or frustrations without revealing your identity.",
+    icon: "🤫",
   },
   {
-    title: "Instant Updates",
-    desc: "Get real-time notifications on events and deadlines.",
-    icon: "🔔",
+    title: "Hot Takes & Polls",
+    desc: "Drop savage opinions or start polls to see where the crowd stands.",
+    icon: "🔥",
   },
   {
-    title: "Study Groups",
-    desc: "Form virtual study groups for collaborative learning.",
-    icon: "📚",
+    title: "Campus Roast Zone",
+    desc: "Lighthearted roasts and meme-worthy moments — all in good fun.",
+    icon: "😂",
   },
 ];
 

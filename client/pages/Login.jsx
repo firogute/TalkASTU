@@ -37,8 +37,8 @@ const Login = () => {
                   name="uname"
                   value={userName}
                   placeholder="Enter your username"
-                  className="block w-full pl-10 pr-3 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 bg-white/90"
-                  minLength="8"
+                  className="block w-full pl-10 pr-3 py-3 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 bg-white/90"
+                  minLength="4"
                   onChange={(e) => setUserName(e.target.value)}
                   required
                 />
@@ -67,8 +67,8 @@ const Login = () => {
                   name="password"
                   id="password"
                   placeholder="Enter your password"
-                  minLength="8"
-                  className="block w-full pl-10 pr-3 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 bg-white/90"
+                  minLength="6"
+                  className="block w-full pl-10 pr-3 py-3 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 bg-white/90"
                   required
                 />
                 <div

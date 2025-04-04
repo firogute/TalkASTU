@@ -3,6 +3,7 @@ import bcrypt from "bcryptjs";
 import db from "../config/db.js";
 import jwtGenerator from "../utils/jwtGenerator.js";
 import authorization from "../middleware/authorization.js";
+import validation from "../middleware/validation.js";
 
 const app = express();
 const router = express.Router();
