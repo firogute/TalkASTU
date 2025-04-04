@@ -5,8 +5,10 @@ import {
   FaFacebookF,
   FaInstagram,
   FaPhoneAlt,
+  FaTelegram,
 } from "react-icons/fa";
-import { FaXTwitter } from "react-icons/fa6";
+import { FaXTwitter, FaUserSecret } from "react-icons/fa6";
+import NavBar from "../components/landing/NavBar";
 
 const LandingPage = () => {
   return (
@@ -35,6 +37,107 @@ const LandingPage = () => {
           </div>
         </nav>
 
+        {/* Animated Telegram Channels */}
+        <section className=" py-12 overflow-hidden">
+          <div className="max-w-6xl mx-auto px-4 flex flex-col">
+            <h2 className="text-3xl font-bold text-center text-gray-800 mb-2">
+              Top <span className="text-emerald-600">ASTU</span> Telegram
+              Channels
+            </h2>
+            <p className="text-center text-gray-600 mb-3 max-w-2xl mx-auto">
+              Join the conversation in these student-run channels
+            </p>
+
+            {/* Animated Channel Ticker */}
+            <div className="relative h-32 overflow-hidden bg-white my-4">
+              {" "}
+              {/* First Row (Left to Right) */}
+              <div className="absolute top-2 left-0 flex items-center space-x-8 whitespace-nowrap animate-marquee">
+                {" "}
+                {[
+                  "#ASTU-POST",
+                  "#ASTU-ENTERTAINMENT",
+                  "#ASTU-GENERAL",
+                  "#ASTU-ONE",
+                  "#ASTU-FRESH",
+                ].map((channel, i) => (
+                  <a
+                    key={`first-${i}`}
+                    href={`https://t.me/${channel.replace("#", "")}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center px-6 py-3 bg-emerald-100 text-emerald-800 rounded-full font-medium hover:bg-emerald-200 transition-all"
+                  >
+                    <FaTelegram className="mr-2" /> {channel}
+                  </a>
+                ))}
+                {/* Duplicate for seamless looping */}
+                {[
+                  "#ASTU-POST",
+                  "#ASTU-ENTERTAINMENT",
+                  "#ASTU-GENERAL",
+                  "#ASTU-ONE",
+                  "#ASTU-FRESH",
+                ].map((channel, i) => (
+                  <a
+                    key={`first-dup-${i}`}
+                    href={`https://t.me/${channel.replace("#", "")}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center px-6 py-3 bg-emerald-100 text-emerald-800 rounded-full font-medium hover:bg-emerald-200 transition-all"
+                  >
+                    <FaTelegram className="mr-2" /> {channel}
+                  </a>
+                ))}
+              </div>
+              {/* Second Row (Right to Left) */}
+              <div className="absolute bottom-2 left-0 flex items-center space-x-8 whitespace-nowrap animate-marquee-reverse">
+                {" "}
+                {[
+                  "#ASTU-NEWS",
+                  "#ASTU-MEMES",
+                  "#ASTU-CHAT",
+                  "#ASTU-HELP",
+                  "#ASTU-LOVE",
+                ].map((channel, i) => (
+                  <a
+                    key={`second-${i}`}
+                    href={`https://t.me/${channel.replace("#", "")}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center px-6 py-3 bg-rose-100 text-rose-800 rounded-full font-medium hover:bg-rose-200 transition-all"
+                  >
+                    <FaTelegram className="mr-2" /> {channel}
+                  </a>
+                ))}
+                {/* Duplicate for seamless looping */}
+                {[
+                  "#ASTU-NEWS",
+                  "#ASTU-MEMES",
+                  "#ASTU-CHAT",
+                  "#ASTU-HELP",
+                  "#ASTU-LOVE",
+                ].map((channel, i) => (
+                  <a
+                    key={`second-dup-${i}`}
+                    href={`https://t.me/${channel.replace("#", "")}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center px-6 py-3 bg-rose-100 text-rose-800 rounded-full font-medium hover:bg-rose-200 transition-all"
+                  >
+                    <FaTelegram className="mr-2" /> {channel}
+                  </a>
+                ))}
+              </div>
+            </div>
+            <button
+              className="px-6 py-3 bg-emerald-600 text-white rounded-full hover:bg-emerald-700 transition font-medium shadow-md w-fit mx-auto my-6"
+              onClick={() => {}}
+            >
+              + Add Your Channel
+            </button>
+          </div>
+        </section>
         {/* Hero Section */}
         <section className="text-center py-20">
           <h1 className="text-5xl font-bold text-gray-800 mb-6">
@@ -48,6 +151,11 @@ const LandingPage = () => {
             (nicely...or not), share cringe-worthy crush stories, and find your
             people in this judgment-free zone!
           </p>
+
+          <div className="flex items-center justify-center gap-2 py-2 hover:shadow-sm transition text-5xl font-bold text-gray-800 mb-6 ">
+            <p className="self-center ">All Anonymously</p>
+            <FaUserSecret className="mt-0.5" />
+          </div>
           <div className="space-x-4">
             <Link
               to="/register"
@@ -103,6 +211,7 @@ const LandingPage = () => {
           </div>
         </section>
       </div>
+
       {/* Footer */}
       {/* rounded-tl-[120px] */}
       <footer className="bg-gradient-to-r from-emerald-600 to-emerald-900 text-white p-12 md:p-0 md:py-12 leading-5 pt-[100px] pb-[30px] text-lg">
