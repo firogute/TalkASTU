@@ -73,7 +73,7 @@ router.post("/login", async (req, res) => {
       user.rows[0].password
     );
     if (!isPasswordValid) {
-      return res.status(401).json({ message: "Invalid password" });
+      return res.status(401).json({ message: "Invalid Credentials" });
     }
     const token = jwtGenerator(user.rows[0].user_id);
     return res.status(200).json({
