@@ -6,7 +6,11 @@ const LandingPage = () => {
       {/* Navigation */}
       <div className="max-w-6xl mx-auto px-4">
         <nav className="py-6 flex justify-between items-center">
-          <h1 className="text-3xl font-bold text-emerald-600">TalkASTU</h1>
+          <div className="text-3xl font-bold text-emerald-600">
+            <a href="/">
+              <img src="/logo2.png" alt="logo" className="h-12 w-auto" />
+            </a>
+          </div>
           <div className="space-x-4">
             <Link
               to="/login"
@@ -75,7 +79,7 @@ const LandingPage = () => {
             ].map((feature, index) => (
               <div
                 key={index}
-                className="bg-white p-8 rounded-xl shadow-md hover:shadow-lg transition hover:-translate-y-1"
+                className="bg-white p-8 rounded-xl shadow-md hover:shadow-lg transition hover:-translate-y-1 cursor-pointer"
               >
                 <span className="text-4xl mb-4 inline-block">
                   {feature.icon}
@@ -91,11 +95,11 @@ const LandingPage = () => {
       </div>
 
       {/* Footer */}
-      <footer className="bg-emerald-600 text-white py-12">
+      <footer className="rounded-tl-lg  bg-gradient-to-r from-emerald-600 to-emerald-900 text-white py-12 leading-5">
         <div className="max-w-6xl mx-auto px-4">
           <div className="grid md:grid-cols-4 gap-8">
-            <div>
-              <h3 className="text-xl font-bold mb-4">TalkASTU</h3>
+            <div className="">
+              <img src="/black-logo.png" alt="footer logo" className="h-10 mb-3" />
               <p className="text-emerald-100">
                 The official communication hub for ASTU community.
               </p>
@@ -123,7 +127,7 @@ const LandingPage = () => {
             <div>
               <h4 className="font-semibold mb-4">Contact</h4>
               <p className="text-emerald-100">contact@talkastu.edu</p>
-              <p className="text-emerald-100">+123 456 7890</p>
+              <p className="text-emerald-100">+251918343427</p>
             </div>
             <div>
               <h4 className="font-semibold mb-4">Follow Us</h4>
