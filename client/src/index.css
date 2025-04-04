@@ -1,1 +1,11 @@
 @import "tailwindcss";
+@tailwind utilities;
+
+@keyframes moving {
+  0% {
+    left: -20px;
+  }
+  100% {
+    left: 100%;
+  }
+}
