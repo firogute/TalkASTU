@@ -4,9 +4,8 @@ import { FaRegUser, FaLock, FaEye } from "react-icons/fa";
 import { FaXmark } from "react-icons/fa6";
 import { GrView, GrFormViewHide } from "react-icons/gr";
 
-const Register = () => {
+const Login = () => {
   const [isView, setIsView] = useState(false);
-  const [isConfirmView, setIsConfirmView] = useState(false);
   const [userName, setUserName] = useState("");
 
   return (
@@ -16,12 +15,7 @@ const Register = () => {
           <img src="/logo.svg" alt="logo" className="w-8 ml-auto" />
         </Link>
         <div className="flex flex-col items-center mb-8">
-          <h1 className="text-3xl font-bold text-gray-800 mb-2">Register</h1>
-          <p className="text-lg text-gray-600">
-            Create an account to{" "}
-            <span className="text-emerald-600 font-medium">join</span> the
-            community.
-          </p>
+          <h1 className="text-3xl font-bold text-gray-800 mb-2">Login</h1>
         </div>
 
         <form className="space-y-6">
@@ -89,52 +83,20 @@ const Register = () => {
                 </div>
               </div>
             </div>
-
-            <div>
-              <label
-                htmlFor="confirmPassword"
-                className="block text-sm font-medium text-gray-700 mb-1"
-              >
-                Confirm Password
-              </label>
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <FaLock className="text-gray-400" />
-                </div>
-                <input
-                  type={isConfirmView ? "text" : "password"}
-                  name="confirmPassword"
-                  id="confirmPassword"
-                  placeholder="Confirm Password"
-                  className="block w-full pl-10 pr-3 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 bg-white/90"
-                  required
-                />
-                <div
-                  className="absolute inset-y-0 right-0 mr-3 h-fit my-auto p-2 flex items-center hover:bg-gray-300 rounded-full cursor-pointer"
-                  onClick={() => setIsConfirmView(!isConfirmView)}
-                >
-                  {isConfirmView ? (
-                    <GrView className="text-gray-900" />
-                  ) : (
-                    <GrFormViewHide className="text-gray-900" />
-                  )}
-                </div>
-              </div>
-            </div>
           </div>
 
           <button
             type="submit"
             className="w-full bg-emerald-600 text-white font-medium py-3 px-4 rounded-xl hover:bg-emerald-700 transition duration-200 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 cursor-pointer"
           >
-            Register
+            Login
           </button>
         </form>
         <div className="self-center my-5 text-[17px]">
           <p>
-            Already Have an account?
-            <Link to="/login" className="text-emerald-800 underline p-1">
-              Login
+            Don`t have an account?
+            <Link to="/register" className="text-emerald-800 underline p-1">
+              Register
             </Link>
           </p>
         </div>
@@ -143,4 +105,4 @@ const Register = () => {
   );
 };
 
-export default Register;
+export default Login;
