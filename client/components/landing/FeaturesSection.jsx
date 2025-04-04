@@ -25,7 +25,7 @@ const FeaturesSection = () => (
       {features.map((feature, index) => (
         <div
           key={index}
-          className="bg-white p-8 rounded-xl shadow-md hover:shadow-lg transition hover:-translate-y-1 cursor-pointer mx-auto"
+          className="bg-white p-8 rounded-xl shadow-md hover:shadow-lg transition hover:-translate-y-1 cursor-pointer mx-auto max-w-100"
         >
           <span className="text-4xl mb-4 inline-block">{feature.icon}</span>
           <h3 className="text-xl font-semibold text-emerald-600 mb-2">
