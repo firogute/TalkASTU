@@ -8,8 +8,11 @@ const HeroSection = () => (
       Community!
     </h1>
     <p className="text-xl text-gray-600 mb-10 max-w-2xl mx-auto">
-      Psst...wanna spill the tea without getting caught? TalkASTU is your
-      anonymous playground...
+      Psst...wanna spill the secret without getting caught? TalkASTU is your
+      anonymous playground for campus gossip, savage confessions, and those 'did
+      that really happen?' moments. Roast professors (nicely...or not), share
+      cringe-worthy crush stories, and find your people in this judgment-free
+      zone!
     </p>
 
     <div className="flex items-center justify-center gap-2 py-2 hover:shadow-sm transition text-5xl font-bold text-gray-800 mb-6 ">
