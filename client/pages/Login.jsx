@@ -6,7 +6,7 @@ import { GrView, GrFormViewHide } from "react-icons/gr";
 import { toast, ToastContainer } from "react-toastify";
 import { ThreeDots } from "react-loader-spinner";
 
-const Login = () => {
+const Login = ({ setAuth }) => {
   const [isView, setIsView] = useState(false);
   const [isLoggingIn, setIsLoggingIn] = useState(false);
   const [inputs, setInputs] = useState({
@@ -34,6 +34,7 @@ const Login = () => {
       if (data.token) {
         localStorage.setItem("token", data.token);
         toast.success(data.message);
+        setAuth(true);
       } else {
         toast.error(data.message);
       }
