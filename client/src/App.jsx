@@ -3,6 +3,7 @@ import LandingPage from "../pages/LandingPage";
 import Register from "../pages/Register";
 import Login from "../pages/Login";
 import RouteWrapper from "../components/RouteWrapper";
+import HomePage from "../pages/HomePage";
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
             <Route path="/" element={<LandingPage />} />
             <Route path="/register" element={<Register />} />
             <Route path="/login" element={<Login />} />
+            <Route path="/home" element={<HomePage />} />
           </Routes>
         </RouteWrapper>
       </Router>
