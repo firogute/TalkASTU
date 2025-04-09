@@ -11,7 +11,7 @@ const RouteWrapper = ({ children }) => {
     setIsLoading(true);
     const timeout = setTimeout(() => {
       setIsLoading(false);
-    }, 1100);
+    }, 800);
 
     return () => clearTimeout(timeout);
   }, [location]);
