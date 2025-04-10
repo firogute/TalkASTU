@@ -2,10 +2,9 @@ import React, { useState } from "react";
 import { FaHeart, FaRegComment, FaShare, FaEllipsisH } from "react-icons/fa";
 import ImageModal from "../ImageModal";
 
-
 const Posts = ({ posts }) => {
   const [selectedImage, setSelectedImage] = useState(null);
-  
+
   return (
     <div className="w-full">
       {selectedImage && (
@@ -14,10 +13,6 @@ const Posts = ({ posts }) => {
           onClose={() => setSelectedImage(null)}
         />
       )}
-
-      <div className="p-4 rounded-xl bg-white border border-emerald-100 shadow-sm">
-
-      </div>
 
       {/* Posts List */}
       <div className="space-y-5">

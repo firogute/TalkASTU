@@ -14,22 +14,33 @@ const HomePage = ({ setAuth }) => {
   const [name, setName] = useState("");
   const [id, setId] = useState(null);
   const [posts, setPosts] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   const getName = useCallback(async () => {
     try {
+      setLoading(true);
       const response = await fetch("http://localhost:7000/home/", {
         method: "GET",
         headers: {
           token: localStorage.getItem("token"),
         },
       });
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch user data");
+      }
+
       const data = await response.json();
       setName(data.user_name);
       setId(data.user_id);
       return data.user_id;
     } catch (err) {
       console.error(err.message);
+      setError(err.message);
       return null;
+    } finally {
+      setLoading(false);
     }
   }, []);
 
@@ -37,10 +48,15 @@ const HomePage = ({ setAuth }) => {
     async (userId) => {
       if (!userId) return;
 
+      setLoading(true);
+      setError(null);
       try {
         const res = await fetch(`http://localhost:7000/post/${userId}`);
+        if (!res.ok) {
+          throw new Error("Failed to fetch posts");
+        }
         const data = await res.json();
-        const formattedPosts = await data.map((post) => ({
+        const formattedPosts = data.map((post) => ({
           id: post.id,
           author: post.username || name,
           avatar: `https://i.pravatar.cc/150?u=${post.user_id}`,
@@ -54,6 +70,9 @@ const HomePage = ({ setAuth }) => {
         setPosts(formattedPosts);
       } catch (err) {
         console.error("Error fetching posts:", err.message);
+        setError(err.message);
+      } finally {
+        setLoading(false);
       }
     },
     [name]
@@ -133,14 +152,38 @@ const HomePage = ({ setAuth }) => {
     const result = await response.json();
 
     if (response.ok) {
-      console.log("Post created:", result);
+      // console.log("Post created:", result);
       setPostText("");
       setPostImage(null);
       setRawImageFile(null);
+      await fetchPosts(id);
     } else {
       console.error("Post failed:", result.message);
     }
   };
+  useEffect(() => {
+    const style = document.createElement("style");
+    style.textContent = `
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      .animate-fade-in-up {
+        animation: fadeInUp 0.6s forwards;
+      }
+    `;
+    document.head.appendChild(style);
+
+    return () => {
+      document.head.removeChild(style);
+    };
+  }, []);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-emerald-50 to-rose-50">
@@ -149,13 +192,27 @@ const HomePage = ({ setAuth }) => {
 
         <main className="py-8">
           <div className="w-full flex justify-center">
-            <div className="channels flex gap-5 p-4 bg-gradient-to-br from-emerald-100 to-rose-100 rounded-full overflow-x-auto max-w-full scrollbar-hide scroll-smooth px-6">
+            <div className="channels flex gap-5 p-4 bg-gradient-to-br from-emerald-100 to-rose-100 rounded-full overflow-x-auto max-w-full scrollbar-hide scroll-smooth px-6 mb-4">
               {[...Array(10)].map((_, i) => (
-                <div key={i}>
+                <div
+                  key={i}
+                  className="relative group animate-fade-in-up cursor-pointer"
+                  style={{
+                    animationDelay: `${i * 0.1}s`,
+                    opacity: 0,
+                    animationFillMode: "forwards",
+                  }}
+                >
+                  {/* Avatar with multiple animations */}
                   <img
                     src={`https://i.pravatar.cc/150?img=${i + 3}`}
                     alt={`channel-${i}`}
-                    className="rounded-full size-16 shrink-0"
+                    className="rounded-full size-16 shrink-0 object-cover 
+                  transition-all duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)]
+                  group-hover:scale-110 group-hover:-translate-y-2
+                  group-hover:ring-4 group-hover:ring-emerald-200/30
+                  group-hover:shadow-lg group-hover:shadow-emerald-100/40
+                  hover:rotate-[5deg]"
                   />
                 </div>
               ))}
@@ -274,7 +331,15 @@ const HomePage = ({ setAuth }) => {
                   </div>
                 </form>
               </div>
-              {posts.length === 0 ? (
+              {loading ? (
+                <div className="flex justify-center py-12">
+                  <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-emerald-500"></div>
+                </div>
+              ) : error ? (
+                <div className="text-center text-red-500 py-12">
+                  Error: {error}
+                </div>
+              ) : posts.length === 0 ? (
                 <div className="text-center text-gray-500 text-lg py-12">
                   No posts yet. Start by adding your first post!
                 </div>
