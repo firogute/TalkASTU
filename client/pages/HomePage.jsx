@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { FaRegBell } from "react-icons/fa";
 import { CiSquarePlus } from "react-icons/ci";
@@ -8,7 +8,24 @@ import { TiMessages } from "react-icons/ti";
 import Posts from "../components/Home/Posts";
 import NavBar from "../components/Home/NavBar";
 
-const HomePage = () => {
+const HomePage = ({ setAuth }) => {
+  const [name, setName] = useState("");
+
+  async function getName() {
+    try {
+      const response = await fetch("http://localhost:7000/home/", {
+        method: "GET",
+        headers: {
+          token: localStorage.getItem("token"), //localStorage.token,
+        },
+      });
+      const data = await response.json();
+      console.log(data);
+      setName(data.user_name);
+    } catch (err) {
+      console.error(err.message);
+    }
+  }
   // Sample data - replace with real data from your database later
   const samplePosts = [
     {
@@ -125,12 +142,30 @@ const HomePage = () => {
     { id: 5, name: "Music & Arts", members: 127 },
   ];
 
+  useEffect(() => {
+    getName();
+  }, []);
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-emerald-50 to-rose-50">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        <NavBar />
+        <NavBar setAuth={setAuth} />
 
         <main className="py-8">
+          <div className="w-full flex justify-center">
+            <div className="channels flex gap-5 p-4 bg-gradient-to-br from-emerald-100 to-rose-100 rounded-full overflow-x-auto max-w-full scrollbar-hide scroll-smooth px-6">
+              {[...Array(10)].map((_, i) => (
+                <div key={i}>
+                  <img
+                    src={`https://i.pravatar.cc/150?img=${i + 3}`}
+                    alt={`channel-${i}`}
+                    className="rounded-full size-16 shrink-0"
+                  />
+                </div>
+              ))}
+            </div>
+          </div>
+
           <div className="flex flex-col lg:flex-row gap-8">
             <div className="w-full lg:w-3/4 space-y-6">
               <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
