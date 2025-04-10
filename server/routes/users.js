@@ -12,7 +12,7 @@ router.get("/", authorization, async (req, res) => {
       `select user_id,username from users where user_id = $1`,
       [id]
     );
-    console.log(user.rows[0]);
+    // console.log(user.rows[0]);
     res.json(user.rows[0]);
   } catch (err) {
     console.error(err.message);

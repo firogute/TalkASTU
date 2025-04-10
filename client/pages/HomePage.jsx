@@ -1,138 +1,73 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { Link } from "react-router-dom";
 import { FaRegBell } from "react-icons/fa";
 import { CiSquarePlus } from "react-icons/ci";
 import { FaMagnifyingGlass } from "react-icons/fa6";
 import { TiMessages } from "react-icons/ti";
+import { FiX } from "react-icons/fi";
+import { supabase } from "../src/supabaseClient";
 
 import Posts from "../components/Home/Posts";
 import NavBar from "../components/Home/NavBar";
 
 const HomePage = ({ setAuth }) => {
   const [name, setName] = useState("");
+  const [id, setId] = useState(null);
+  const [posts, setPosts] = useState([]);
 
-  async function getName() {
+  const getName = useCallback(async () => {
     try {
       const response = await fetch("http://localhost:7000/home/", {
         method: "GET",
         headers: {
-          token: localStorage.getItem("token"), //localStorage.token,
+          token: localStorage.getItem("token"),
         },
       });
       const data = await response.json();
-      console.log(data);
       setName(data.user_name);
+      setId(data.user_id);
+      return data.user_id;
     } catch (err) {
       console.error(err.message);
+      return null;
     }
-  }
-  // Sample data - replace with real data from your database later
-  const samplePosts = [
-    {
-      id: 1,
-      author: "John Doe",
-      avatar: "https://i.pravatar.cc/150?img=1",
-      content:
-        "Just finished my final project for CS101! Here's a screenshot of the UI I designed.",
-      image:
-        "https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=800&auto=format",
-      time: "2 hours ago",
-      likes: 24,
-      comments: 8,
+  }, []);
+
+  const fetchPosts = useCallback(
+    async (userId) => {
+      if (!userId) return;
+
+      try {
+        const res = await fetch(`http://localhost:7000/post/${userId}`);
+        const data = await res.json();
+        const formattedPosts = await data.map((post) => ({
+          id: post.id,
+          author: post.username || name,
+          avatar: `https://i.pravatar.cc/150?u=${post.user_id}`,
+          content: post.content,
+          image: post.image_url,
+          time: new Date(post.created_at).toLocaleString(),
+          likes: Math.floor(Math.random() * 200),
+          comments: Math.floor(Math.random() * 40),
+        }));
+
+        setPosts(formattedPosts);
+      } catch (err) {
+        console.error("Error fetching posts:", err.message);
+      }
     },
-    {
-      id: 2,
-      author: "Sarah Smith",
-      avatar: "https://i.pravatar.cc/150?img=2",
-      content:
-        "There's a great workshop on machine learning this Friday. Who's interested?",
-      time: "5 hours ago",
-      likes: 42,
-      comments: 15,
-    },
-    {
-      id: 3,
-      author: "CS Department",
-      avatar: "https://i.pravatar.cc/150?img=3",
-      content:
-        "Our annual hackathon results are in! Check out the winning projects in these photos.",
-      image:
-        "https://images.unsplash.com/photo-1517430816045-df4b7de11d1d?w=800&auto=format",
-      time: "1 day ago",
-      likes: 87,
-      comments: 23,
-    },
-    {
-      id: 4,
-      author: "Physics Department",
-      avatar: "https://i.pravatar.cc/150?img=30",
-      content:
-        "The annual science fair will be held next Wednesday in the main auditorium. All projects must be submitted by Monday!",
-      image:
-        "https://images.unsplash.com/photo-1532094349884-543bc11b234d?w=800&auto=format",
-      time: "3 hours ago",
-      likes: 56,
-      comments: 12,
-    },
-    {
-      id: 5,
-      author: "Alex Johnson",
-      avatar: "https://i.pravatar.cc/150?img=12",
-      content:
-        "Just aced my calculus midterm! Here's my study notes if anyone needs them for the make-up exam.",
-      image:
-        "https://images.unsplash.com/photo-1509869175650-a1d97972541a?w=800&auto=format",
-      time: "1 day ago",
-      likes: 89,
-      comments: 24,
-    },
-    {
-      id: 6,
-      author: "Student Union",
-      avatar: "https://i.pravatar.cc/150?img=45",
-      content:
-        "Spring festival lineup is here! Who's excited for the concert next Friday?",
-      image:
-        "https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=800&auto=format",
-      time: "5 hours ago",
-      likes: 210,
-      comments: 47,
-    },
-    {
-      id: 7,
-      author: "Coding Club",
-      avatar: "https://i.pravatar.cc/150?img=28",
-      content:
-        "24-hour hackathon starts tomorrow! Last chance to register your team.",
-      image:
-        "https://images.unsplash.com/photo-1517430816045-df4b7de11d1d?w=800&auto=format",
-      time: "2 days ago",
-      likes: 132,
-      comments: 31,
-    },
-    {
-      id: 8,
-      author: "Maria Garcia",
-      avatar: "https://i.pravatar.cc/150?img=8",
-      content: "Beautiful sunset at the campus lake today! 🌅",
-      image:
-        "https://images.unsplash.com/photo-1501785888041-af3ef285b470?w=800&auto=format",
-      time: "Just now",
-      likes: 42,
-      comments: 5,
-    },
-    {
-      id: 9,
-      author: "Cafeteria",
-      avatar: "https://i.pravatar.cc/150?img=50",
-      content: "New menu items this week - try our vegan options!",
-      image:
-        "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=800&auto=format",
-      time: "4 hours ago",
-      likes: 78,
-      comments: 15,
-    },
-  ];
+    [name]
+  );
+
+  useEffect(() => {
+    const loadData = async () => {
+      const userId = await getName();
+      if (userId) {
+        await fetchPosts(userId);
+      }
+    };
+    loadData();
+  }, [getName, fetchPosts]);
 
   const sampleChannels = [
     { id: 1, name: "Computer Science", members: 342 },
@@ -142,9 +77,70 @@ const HomePage = ({ setAuth }) => {
     { id: 5, name: "Music & Arts", members: 127 },
   ];
 
-  useEffect(() => {
-    getName();
-  }, []);
+  const [postText, setPostText] = useState("");
+  const [rawImageFile, setRawImageFile] = useState(null);
+  const [postImage, setPostImage] = useState(null);
+
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setPostImage(URL.createObjectURL(file));
+      setRawImageFile(file);
+    }
+  };
+
+  const handleRemoveImage = () => {
+    setPostImage(null);
+  };
+
+  const handlePost = async (e) => {
+    e.preventDefault();
+
+    if (postText.trim() === "" && !rawImageFile) return;
+
+    let imageUrl = null;
+
+    // uploading to Supabase
+    if (rawImageFile) {
+      const fileName = `${Date.now()}_${rawImageFile.name}`;
+      const { data, error } = await supabase.storage
+        .from("talkastu")
+        .upload(`posts/${fileName}`, rawImageFile);
+
+      if (error) {
+        console.error("Image upload failed:", error.message);
+        return;
+      }
+
+      const { data: publicData } = supabase.storage
+        .from("talkastu")
+        .getPublicUrl(`posts/${fileName}`);
+
+      imageUrl = publicData.publicUrl;
+    }
+    // Post to backend
+    const response = await fetch("http://localhost:7000/post/", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        token: localStorage.getItem("token"),
+      },
+      body: JSON.stringify({
+        content: postText,
+        image_url: imageUrl,
+      }),
+    });
+    const result = await response.json();
+
+    if (response.ok) {
+      console.log("Post created:", result);
+      setPostText("");
+      setPostImage(null);
+      setRawImageFile(null);
+    } else {
+      console.error("Post failed:", result.message);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-emerald-50 to-rose-50">
@@ -216,7 +212,75 @@ const HomePage = ({ setAuth }) => {
                   </button>
                 </div>
               </div>
-              <Posts posts={samplePosts} />
+              <div className="flex items-start gap-3">
+                <img
+                  src="https://i.pravatar.cc/150?img=4"
+                  alt="User"
+                  className="h-10 w-10 rounded-full object-cover"
+                />
+                <form
+                  className="flex items-start gap-3 w-full"
+                  onSubmit={handlePost}
+                >
+                  <div className="flex-1 w-full">
+                    <textarea
+                      placeholder="What's on your mind?"
+                      value={postText}
+                      onChange={(e) => setPostText(e.target.value)}
+                      className="w-full p-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-100 resize-none"
+                      rows="3"
+                    />
+                    {postImage && (
+                      <div className="relative mt-3 max-w-xs border rounded-lg overflow-hidden">
+                        <img
+                          src={postImage}
+                          alt="Preview"
+                          className="w-full object-contain max-h-60"
+                        />
+                        <button
+                          onClick={handleRemoveImage}
+                          className="absolute top-1 right-1 p-1 bg-black bg-opacity-50 text-white rounded-full hover:bg-opacity-80"
+                          aria-label="Remove image"
+                        >
+                          <FiX size={16} />
+                        </button>
+                      </div>
+                    )}
+                    <div className="flex justify-between items-center mt-3">
+                      <div className="flex items-center gap-3">
+                        <label
+                          htmlFor="image-upload"
+                          className="p-1.5 text-emerald-600 hover:text-emerald-700 rounded-full hover:bg-emerald-50 transition-colors cursor-pointer"
+                          title="Upload Image"
+                        >
+                          <CiSquarePlus className="text-xl" />
+                          <input
+                            id="image-upload"
+                            type="file"
+                            accept="image/*"
+                            onChange={handleImageChange}
+                            className="hidden"
+                          />
+                        </label>
+                      </div>
+                      <button
+                        onClick={handlePost}
+                        type="submit"
+                        className="px-5 py-2 bg-emerald-600 text-white rounded-full hover:bg-emerald-700 transition-colors font-medium cursor-pointer"
+                      >
+                        Post
+                      </button>
+                    </div>
+                  </div>
+                </form>
+              </div>
+              {posts.length === 0 ? (
+                <div className="text-center text-gray-500 text-lg py-12">
+                  No posts yet. Start by adding your first post!
+                </div>
+              ) : (
+                <Posts posts={posts} />
+              )}
             </div>
 
             <div className="w-full lg:w-1/4">

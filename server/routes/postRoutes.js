@@ -62,9 +62,14 @@ router.get("/:user_id", async (req, res) => {
 
   try {
     const posts = await db.query(
-      "SELECT * FROM posts WHERE user_id = $1 ORDER BY created_at DESC",
+      `SELECT posts.*, users.username 
+       FROM posts 
+       JOIN users ON posts.user_id = users.user_id 
+       WHERE posts.user_id = $1 
+       ORDER BY created_at DESC`,
       [user_id]
     );
+    // console.log(posts);
 
     // Check if posts were found
     if (posts.rows.length === 0) {

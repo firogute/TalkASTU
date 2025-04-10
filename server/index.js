@@ -3,6 +3,7 @@ import express from "express";
 import authRoutes from "./routes/auth.js";
 import postRoutes from "./routes/postRoutes.js";
 import likeRoutes from "./routes/likeRoutes.js";
+import userRoute from "./routes/users.js";
 
 import cors from "cors";
 const router = express.Router();
@@ -19,6 +20,7 @@ app.use(cors());
 app.use("/auth", authRoutes);
 app.use("/likes", likeRoutes);
 app.use("/post", postRoutes);
+app.use("/home", userRoute);
 
 const port = process.env.PORT || 5000;
 
