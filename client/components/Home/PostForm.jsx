@@ -6,6 +6,7 @@ const PostForm = ({ fetchPosts, id }) => {
   const [postText, setPostText] = useState("");
   const [postImage, setPostImage] = useState(null);
   const [rawImageFile, setRawImageFile] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
@@ -24,47 +25,52 @@ const PostForm = ({ fetchPosts, id }) => {
     e.preventDefault();
     if (postText.trim() === "" && !rawImageFile) return;
 
+    setLoading(true);
+
     let imageUrl = null;
 
-    if (rawImageFile) {
-      const fileName = `${Date.now()}_${rawImageFile.name}`;
-      const { error } = await supabase.storage
-        .from("talkastu")
-        .upload(`posts/${fileName}`, rawImageFile);
+    try {
+      if (rawImageFile) {
+        const fileName = `${Date.now()}_${rawImageFile.name}`;
+        const { error } = await supabase.storage
+          .from("talkastu")
+          .upload(`posts/${fileName}`, rawImageFile);
 
-      if (error) {
-        console.error("Image upload failed:", error.message);
-        return;
+        if (error) throw new Error("Image upload failed");
+
+        const { data: publicData } = supabase.storage
+          .from("talkastu")
+          .getPublicUrl(`posts/${fileName}`);
+        imageUrl = publicData.publicUrl;
       }
 
-      const { data: publicData } = supabase.storage
-        .from("talkastu")
-        .getPublicUrl(`posts/${fileName}`);
-      imageUrl = publicData.publicUrl;
+      const response = await fetch("http://localhost:7000/post", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          token: localStorage.getItem("token"),
+        },
+        body: JSON.stringify({
+          content: postText,
+          image_url: imageUrl,
+        }),
+      });
+
+      const result = await response.json();
+
+      if (response.ok) {
+        setPostText("");
+        setPostImage(null);
+        setRawImageFile(null);
+        await fetchPosts(id);
+      } else {
+        console.error("Post failed:", result.message);
+      }
+    } catch (err) {
+      console.error("Post error:", err.message);
     }
 
-    const response = await fetch("http://localhost:7000/post/", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        token: localStorage.getItem("token"),
-      },
-      body: JSON.stringify({
-        content: postText,
-        image_url: imageUrl,
-      }),
-    });
-
-    const result = await response.json();
-
-    if (response.ok) {
-      setPostText("");
-      setPostImage(null);
-      setRawImageFile(null);
-      await fetchPosts(id); // reload posts
-    } else {
-      console.error("Post failed:", result.message);
-    }
+    setLoading(false);
   };
 
   return (
@@ -110,9 +116,14 @@ const PostForm = ({ fetchPosts, id }) => {
           </label>
           <button
             type="submit"
-            className="bg-emerald-500 text-white px-4 py-2 rounded-lg hover:bg-emerald-600 transition"
+            disabled={loading}
+            className={`px-4 py-2 rounded-lg transition ${
+              loading
+                ? "bg-emerald-300 cursor-not-allowed"
+                : "bg-emerald-500 hover:bg-emerald-600 text-white"
+            }`}
           >
-            Post
+            {loading ? "Posting..." : "Post"}
           </button>
         </div>
       </form>

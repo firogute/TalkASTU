@@ -57,6 +57,7 @@ const HomePage = ({ setAuth }) => {
           throw new Error("Failed to fetch posts");
         }
         const data = await res.json();
+        console.log(data);
         const formattedPosts = data.map((post) => ({
           id: post.id,
           author: post.username || name,

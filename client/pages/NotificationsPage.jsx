@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import { FiBell, FiCheck, FiTrash2, FiSettings } from "react-icons/fi";
-import { FaRegBell, FaBell, FaBellSlash } from "react-icons/fa";
 
-const NotificationsPage = () => {
+import NavBar from "../components/Home/NavBar";
+
+const NotificationsPage = ({ setAuth }) => {
   const [notifications, setNotifications] = useState([
     {
       id: 1,
@@ -81,7 +82,8 @@ const NotificationsPage = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-emerald-50 to-rose-50">
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="bg-white rounded-xl shadow-sm border border-emerald-100 overflow-hidden">
+        <div className="bg-white rounded-xl shadow-sm border border-emerald-100 overflow-hidden p-4">
+          <NavBar setAuth={setAuth} />
           {/* Header */}
           <div className="p-6 border-b border-emerald-100">
             <div className="flex justify-between items-center">
@@ -91,7 +93,7 @@ const NotificationsPage = () => {
               </h2>
               <button
                 onClick={markAllAsRead}
-                className="text-sm text-emerald-600 hover:text-emerald-700 font-medium"
+                className="text-sm text-emerald-600 hover:text-emerald-700 font-medium cursor-pointer"
               >
                 Mark all as read
               </button>
@@ -108,7 +110,7 @@ const NotificationsPage = () => {
               notifications.map((notification) => (
                 <div
                   key={notification.id}
-                  className={`p-4 hover:bg-emerald-50 transition-colors ${
+                  className={`p-4 hover:bg-emerald-50 transition-colors cursor-pointer ${
                     !notification.read ? "bg-emerald-50/50" : ""
                   }`}
                 >
@@ -172,14 +174,14 @@ const NotificationsPage = () => {
                 </div>
                 <button
                   onClick={() => toggleSetting("pushEnabled")}
-                  className={`relative inline-flex items-center h-6 rounded-full w-11 transition-colors focus:outline-none ${
+                  className={`relative inline-flex items-center h-6 rounded-full w-11 transition-colors focus:outline-none cursor-pointer ${
                     notificationSettings.pushEnabled
                       ? "bg-emerald-600"
                       : "bg-gray-200"
                   }`}
                 >
                   <span
-                    className={`inline-block w-4 h-4 transform transition-transform rounded-full bg-white ${
+                    className={`inline-block w-4 h-4 transform transition-transform rounded-full bg-white cursor-pointer ${
                       notificationSettings.pushEnabled
                         ? "translate-x-6"
                         : "translate-x-1"
@@ -197,7 +199,7 @@ const NotificationsPage = () => {
                 </div>
                 <button
                   onClick={() => toggleSetting("emailEnabled")}
-                  className={`relative inline-flex items-center h-6 rounded-full w-11 transition-colors focus:outline-none ${
+                  className={`relative inline-flex items-center h-6 rounded-full w-11 transition-colors focus:outline-none cursor-pointer ${
                     notificationSettings.emailEnabled
                       ? "bg-emerald-600"
                       : "bg-gray-200"
@@ -222,7 +224,7 @@ const NotificationsPage = () => {
                 </div>
                 <button
                   onClick={() => toggleSetting("soundEnabled")}
-                  className={`relative inline-flex items-center h-6 rounded-full w-11 transition-colors focus:outline-none ${
+                  className={`relative inline-flex items-center h-6 rounded-full w-11 transition-colors focus:outline-none cursor-pointer ${
                     notificationSettings.soundEnabled
                       ? "bg-emerald-600"
                       : "bg-gray-200"
