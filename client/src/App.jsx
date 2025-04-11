@@ -14,6 +14,7 @@ import Register from "../pages/Register";
 import Login from "../pages/Login";
 import HomePage from "../pages/HomePage";
 import RouteWrapper from "../components/RouteWrapper";
+import SettingsPage from "../pages/SettingsPage";
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -60,14 +61,12 @@ function App() {
       <Router>
         <RouteWrapper>
           <Routes>
-            {/* Landing */}
             <Route
               path="/"
               element={
                 !isAuthenticated ? <LandingPage /> : <Navigate to="/home" />
               }
             />
-            {/* Login */}
             <Route
               path="/login"
               element={
@@ -78,7 +77,6 @@ function App() {
                 )
               }
             />
-            {/* Register */}
             <Route
               path="/register"
               element={
@@ -89,7 +87,6 @@ function App() {
                 )
               }
             />
-            {/* Protected HomePage */}
             <Route
               path="/home"
               element={
@@ -98,6 +95,12 @@ function App() {
                 ) : (
                   <Navigate to="/login" />
                 )
+              }
+            />
+            <Route
+              path="/settings"
+              element={
+                isAuthenticated ? <SettingsPage /> : <Navigate to="/login" />
               }
             />
           </Routes>
