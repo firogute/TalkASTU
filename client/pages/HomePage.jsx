@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback } from "react";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { FaRegBell } from "react-icons/fa";
 import { CiSquarePlus } from "react-icons/ci";
 import { FaMagnifyingGlass } from "react-icons/fa6";
@@ -17,6 +17,7 @@ const HomePage = ({ setAuth }) => {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const navigate = useNavigate();
 
   const getName = useCallback(async () => {
     try {
@@ -57,7 +58,6 @@ const HomePage = ({ setAuth }) => {
           throw new Error("Failed to fetch posts");
         }
         const data = await res.json();
-        console.log(data);
         const formattedPosts = data.map((post) => ({
           id: post.id,
           author: post.username || name,
@@ -152,6 +152,7 @@ const HomePage = ({ setAuth }) => {
 
                   <button
                     aria-label="Messages"
+                    onClick={() => navigate("/messages")}
                     className="group relative p-1 text-xl text-gray-600 hover:text-blue-500 transition-colors cursor-pointer"
                   >
                     <TiMessages />
@@ -162,6 +163,7 @@ const HomePage = ({ setAuth }) => {
 
                   <button
                     aria-label="Notifications"
+                    onClick={() => navigate("/notifications")}
                     className="group relative p-1 text-xl text-gray-600 hover:text-blue-500 transition-colors cursor-pointer"
                   >
                     <FaRegBell />
