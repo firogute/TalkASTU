@@ -15,6 +15,7 @@ import Login from "../pages/Login";
 import HomePage from "../pages/HomePage";
 import RouteWrapper from "../components/RouteWrapper";
 import SettingsPage from "../pages/SettingsPage";
+import NotificationsPage from "../pages/NotificationsPage";
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -101,6 +102,16 @@ function App() {
               path="/settings"
               element={
                 isAuthenticated ? <SettingsPage /> : <Navigate to="/login" />
+              }
+            />
+            <Route
+              path="/notifications"
+              element={
+                isAuthenticated ? (
+                  <NotificationsPage />
+                ) : (
+                  <Navigate to="/login" />
+                )
               }
             />
           </Routes>

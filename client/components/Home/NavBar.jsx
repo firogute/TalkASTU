@@ -26,7 +26,7 @@ const NavBar = ({ setAuth }) => {
   }, []);
 
   return (
-    <nav className="py-6 flex justify-between items-center border-b border-emerald-100 relative">
+    <nav className="py-4 flex justify-between items-center border-b border-emerald-100 relative">
       <Link
         to="/"
         className="text-3xl font-bold text-emerald-600 hover:opacity-90 transition-opacity"
